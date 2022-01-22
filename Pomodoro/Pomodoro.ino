@@ -7,10 +7,12 @@
 */
 
 #include <Adafruit_Circuit_Playground.h>
-#include <Adafruit_CircuitPlayground.h>
 
 bool pinLevel = HIGH;
-long endTime;
+unsigned long endTime, lastUpdate = 0;
+const long updateIntervalMs = 500;
+unsigned int loops = 0;
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -28,9 +30,25 @@ void setup() {
     endTime = millis() + 5 * 1000;
 }
 
-// the loop function runs over and over again until power down or reset
 void loop() {
-    pinLevel = !pinLevel;
-    CircuitPlayground.redLED(pinLevel);
-    delay(500);
+    long currentTime = millis();
+    long timeRemaining = endTime - currentTime;
+    long wholeSecondsRemaining = timeRemaining / 1000;
+    for (uint8_t p = 0; p < wholeSecondsRemaining; p++)
+    {
+        CircuitPlayground.setPixelColor(p, 0xFF, 0, 0);
+    }
+
+    CircuitPlayground.setPixelColor(wholeSecondsRemaining, 0xFF * (timeRemaining % 1000) / 1000, 0, 0);
+
+    loops++;
+    if (currentTime - lastUpdate > updateIntervalMs && timeRemaining > 0)
+    {
+        pinLevel = !pinLevel;
+        CircuitPlayground.redLED(pinLevel);
+        Serial.print("loops / interval = "); Serial.println(loops);
+
+        lastUpdate = currentTime;
+        loops = 0;
+    }
 }
