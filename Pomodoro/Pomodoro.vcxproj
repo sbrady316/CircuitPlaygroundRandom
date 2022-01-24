@@ -112,14 +112,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ConstantRenderer.h" />
+    <ClInclude Include="src\IIntervalRenderer.h" />
     <ClInclude Include="__vm\.Pomodoro.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ConstantRenderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config.Debug.customdebug_circuitplay32u4cat_debugger_type="universal" />
+      <UserProperties arduino.upload.port="COM3" config.Debug.customdebug_circuitplay32u4cat_debugger_type="universal" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
