@@ -112,11 +112,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\RangedRenderer.h" />
     <ClInclude Include="src\ConstantRenderer.h" />
     <ClInclude Include="src\IIntervalRenderer.h" />
     <ClInclude Include="__vm\.Pomodoro.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\RangedRenderer.cpp" />
     <ClCompile Include="src\ConstantRenderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

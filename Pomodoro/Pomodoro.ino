@@ -6,9 +6,9 @@
  Timer app for doing the pomodoro technique
 */
 
-#include "RangedRenderer.h"
 #include <Adafruit_Circuit_Playground.h>
 #include "src\ConstantRenderer.h"
+#include "src\RangedRenderer.h"
 
 unsigned long endTime, lastUpdate = 0;
 const size_t ledCount = 10;
@@ -19,6 +19,7 @@ unsigned int loops = 0;
 bool lightsOn = true;
 
 ConstantRenderer* crp = new ConstantRenderer();
+IIntervalRenderer* irp = new RangedRenderer(10 * 1000, 0xFF0000);
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -35,13 +36,11 @@ void setup() {
 
     endTime = millis() + 5 * 1000;
 
-    Serial.print("Colors:");
-    auto& colors = crp->Render(0);
-    for (size_t p = 0; p < ledCount; p++)
-    {
-        Serial.print(colors[p]); Serial.print(" ");
-    }
-    Serial.println();
+    LogLedArray("CRP", crp->Render(5000));
+    LogLedArray("0500", irp->Render(500));
+    auto& colors = irp->Render(5000);
+    LogLedArray("5000", colors);
+    LogLedArray("6500", irp->Render(6500));
 }
 
 void loop() {
@@ -58,7 +57,7 @@ void loop() {
 
     long currentTime = millis();
     long timeRemaining = endTime - currentTime;
-    auto& colors = crp->Render(timeRemaining);
+    auto& colors = irp->Render(timeRemaining);
     if (lightsOn)
     {
         for (size_t p = 0; p < ledCount; p++)
@@ -66,25 +65,19 @@ void loop() {
             CircuitPlayground.setPixelColor(p, colors[p]);
         }
     }
+}
 
-    /*
-    long wholeSecondsRemaining = timeRemaining / 1000;
-    for (uint8_t p = 0; p < wholeSecondsRemaining; p++)
+void LogLedArray(const char * tag, const led_array& colors)
+{
+    char numberBuffer[16];
+    String message(tag);
+    message += ": ";
+
+    for (size_t p = 0; p < ledCount; p++)
     {
-        CircuitPlayground.setPixelColor(p, 0xFF, 0, 0);
+        snprintf(numberBuffer, sizeof numberBuffer / sizeof numberBuffer[0], " 0x%08X", colors[p]);
+
+        message += numberBuffer;
     }
-
-    CircuitPlayground.setPixelColor(wholeSecondsRemaining, 0xFF * (timeRemaining % 1000) / 1000, 0, 0);
-
-    loops++;
-    if (currentTime - lastUpdate > updateIntervalMs && timeRemaining > 0)
-    {
-        pinLevel = !pinLevel;
-        CircuitPlayground.redLED(pinLevel);
-        Serial.print("loops / interval = "); Serial.println(loops);
-
-        lastUpdate = currentTime;
-        loops = 0;
-    }
-    */
+    Serial.println(message);
 }

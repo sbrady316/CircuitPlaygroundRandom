@@ -23,9 +23,9 @@ public:
 	/// <summary>
 	/// Renders the value into an array of color values
 	/// </summary>
-	/// <param name="toRender">The value to render</param>
+	/// <param name="ignored">Time to render.  Ignored in this implementation.</param>
 	/// <returns>Read-only reference to vector</returns>
-	const virtual led_array & Render(long toRender);
+	const virtual led_array & Render(unsigned long ignored);
 
 private:
 	led_array currentView;
