@@ -34,7 +34,7 @@ void setup() {
     // Geez, that's bright
     CircuitPlayground.setBrightness(10);
 
-    endTime = millis() + 5 * 1000;
+    endTime = millis() + 12 * 1000;
 
     LogLedArray("CRP", crp->Render(5000));
     LogLedArray("0500", irp->Render(500));
@@ -79,5 +79,6 @@ void LogLedArray(const char * tag, const led_array& colors)
 
         message += numberBuffer;
     }
+
     Serial.println(message);
 }
