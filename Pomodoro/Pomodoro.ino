@@ -9,6 +9,7 @@
 #include <Adafruit_Circuit_Playground.h>
 #include "src\ConstantRenderer.h"
 #include "src\RangedRenderer.h"
+#include "src\PassThroughLogger.h"
 
 unsigned long endTime, lastUpdate = 0;
 const size_t ledCount = 10;
@@ -18,6 +19,12 @@ unsigned int loops = 0;
 // Track if lights should be off
 bool lightsOn = true;
 
+void SerialPrint(const char* message)
+{
+    Serial.print(message);
+}
+
+PassThroughLogger logger(SerialPrint);
 ConstantRenderer* crp = new ConstantRenderer();
 IIntervalRenderer* irp = new RangedRenderer(10 * 1000, 0xFF0000);
 
@@ -36,11 +43,11 @@ void setup() {
 
     endTime = millis() + 12 * 1000;
 
-    LogLedArray("CRP", crp->Render(5000));
-    LogLedArray("0500", irp->Render(500));
+    logger.LogArray("CRP", crp->Render(5000), ledCount);
+    logger.LogArray("0500", irp->Render(500), ledCount);
     auto& colors = irp->Render(5000);
-    LogLedArray("5000", colors);
-    LogLedArray("6500", irp->Render(6500));
+    logger.LogArray("5000", colors, ledCount);
+    logger.LogArray("6500", irp->Render(6500), ledCount);
 }
 
 void loop() {
@@ -82,3 +89,6 @@ void LogLedArray(const char * tag, const led_array& colors)
 
     Serial.println(message);
 }
+
+
+

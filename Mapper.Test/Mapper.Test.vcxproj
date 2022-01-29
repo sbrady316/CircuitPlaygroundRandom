@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Logger.Test.cpp" />
     <ClCompile Include="Mapper.Test.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -165,6 +166,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Pomodoro\src\PassThroughLogger.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <!-- Items to test from other project -->

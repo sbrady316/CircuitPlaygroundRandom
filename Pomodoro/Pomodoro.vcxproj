@@ -112,6 +112,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\PassThroughLogger.h" />
     <ClInclude Include="src\RangedRenderer.h" />
     <ClInclude Include="src\ConstantRenderer.h" />
     <ClInclude Include="src\IIntervalRenderer.h" />

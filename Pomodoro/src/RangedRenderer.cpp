@@ -21,11 +21,11 @@ const led_array& RangedRenderer::Render(unsigned long timeMs)
     else
     {
         float unitsRemaining = ((float)timeMs / this->maxTimeMs) * this->ledCount;
-        uint8_t wholeUnits = floor(unitsRemaining);
+        uint8_t wholeUnits = static_cast<uint8_t>(floor(unitsRemaining));
 
         // Fade the "last" led by reducing its color by the fractional unit remaining
         // This goes before the whole units to cover the case where wholeUnits == unitsRemaining
-        this->currentView[wholeUnits] = this->color * (unitsRemaining - wholeUnits);
+        this->currentView[wholeUnits] = static_cast<long>(this->color * (unitsRemaining - wholeUnits));
 
         // Set whole units to the full color specified by the caller
         for (uint8_t i = 0; i < wholeUnits; i++)

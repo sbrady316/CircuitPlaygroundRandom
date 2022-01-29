@@ -7,23 +7,17 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace MapperTest
 {
-	BEGIN_TEST_MODULE_ATTRIBUTE()
-		TEST_MODULE_ATTRIBUTE(L"Date", L"2010/6/12")
-	END_TEST_MODULE_ATTRIBUTE()
-
-
 	TEST_MODULE_INITIALIZE(ModuleInitialize)
 	{
-		Logger::WriteMessage("In Module Initialize");
+		//Logger::WriteMessage("In Module Initialize");
 	}
 
 	TEST_MODULE_CLEANUP(ModuleCleanup)
 	{
-		Logger::WriteMessage("In Module Cleanup");
+		//Logger::WriteMessage("In Module Cleanup");
 	}
 
-
-
+ 
 	TEST_CLASS(RangedRendererTest)
 	{
 	public:
