@@ -19,12 +19,16 @@ unsigned int loops = 0;
 // Track if lights should be off
 bool lightsOn = true;
 
-void SerialPrint(const char* message)
+class SerialLogger : public ILogSink
 {
-    Serial.print(message);
-}
+    virtual void Log(const char* message)
+    {
+        Serial.print(message);
+    }
+};
 
-PassThroughLogger logger(SerialPrint);
+SerialLogger sl;
+PassThroughLogger logger(sl);
 ConstantRenderer* crp = new ConstantRenderer();
 IIntervalRenderer* irp = new RangedRenderer(10 * 1000, 0xFF0000);
 
@@ -73,22 +77,5 @@ void loop() {
         }
     }
 }
-
-void LogLedArray(const char * tag, const led_array& colors)
-{
-    char numberBuffer[16];
-    String message(tag);
-    message += ": ";
-
-    for (size_t p = 0; p < ledCount; p++)
-    {
-        snprintf(numberBuffer, sizeof numberBuffer / sizeof numberBuffer[0], " 0x%08X", colors[p]);
-
-        message += numberBuffer;
-    }
-
-    Serial.println(message);
-}
-
 
 

@@ -10,6 +10,11 @@
 /// Method used 
 /// </summary>
 typedef void (LogDelegate)(const char*);
+class ILogSink
+{
+public:
+	virtual void Log(const char* message) = 0;
+};
 
 /// <summary>
 /// Simple class for formatting log messages and writing to a reciever
@@ -17,55 +22,74 @@ typedef void (LogDelegate)(const char*);
 class PassThroughLogger
 {
 public:
-	PassThroughLogger(LogDelegate log)
-	: log(log)
+	PassThroughLogger(ILogSink& logSink)
+	: logSink(logSink)
 	{
 
 	}
 
 	void Log(const char* format, ...)
 	{
-		char formatBuffer[128];
-		char buffer[128];
+		char buffer[BufferSize];
 
 		// Decorate the format string with logger information
-		snprintf(formatBuffer, sizeof(formatBuffer), "%s\n", format);
 		va_list argp;
-		va_start(argp, formatBuffer);
-		vsnprintf(buffer, sizeof(buffer), formatBuffer, argp);
+		va_start(argp, format);
+		auto pos = vsnprintf(buffer, sizeof(buffer), format, argp);
 		va_end(argp);
 
-		log(buffer);
+		// Add a trailing newline and terminator
+		if (pos < 0)
+		{
+			pos = 0;
+		}
+		else if (pos > BufferSize - 2)
+		{
+			pos = BufferSize - 2;
+		}
+		
+		buffer[pos++] = '\n';
+		buffer[pos++] = '\0';
+
+		logSink.Log(buffer);
 	}
 
 	void LogArray(const char* tag, const long * array, size_t count)
 	{
-		char buffer[128];
-		size_t maxSize = sizeof(buffer);
+		char buffer[BufferSize];
 		size_t pos = 0;
 
 		// Copy the tag into the buffer, leaving room for a separator and null terminator
 		if (tag)
 		{
-			strncpy(buffer, tag, maxSize - 2);
-			pos = strnlen(buffer, maxSize - 2);
+			strncpy(buffer, tag, BufferSize - 2);
+			pos = strnlen(tag, BufferSize - 2);
 
 			buffer[pos++] = ':';
 		}
 
 		// Now add the array members
-		for (size_t i = 0; pos < maxSize && i < count; i++) {
-			int len = snprintf(buffer + pos, maxSize - pos, " 0x%08x", array[i]);
+		for (size_t i = 0; pos < BufferSize && i < count; i++) {
+			int len = snprintf(buffer + pos, BufferSize - pos, " 0x%08x", array[i]);
 			pos += len;
 		}
 
 		// Ensure the buffer is null-terminated
+		if (pos < 0)
+		{
+			pos = 0;
+		}
+		else if (pos > BufferSize - 1)
+		{
+			pos = BufferSize - 1;
+		}
 		buffer[pos] = '\0';
 
 		Log(buffer);
 	}
 
 private:
-	LogDelegate* log;
+	static constexpr size_t BufferSize = 128;
+	ILogSink& logSink;
 };
 
