@@ -49,7 +49,7 @@ void setup() {
 
     logger.LogArray("CRP", crp->Render(5000), ledCount);
     logger.LogArray("0500", irp->Render(500), ledCount);
-    auto& colors = irp->Render(5000);
+    auto* colors = irp->Render(5000);
     logger.LogArray("5000", colors, ledCount);
     logger.LogArray("6500", irp->Render(6500), ledCount);
 }
@@ -68,7 +68,7 @@ void loop() {
 
     long currentTime = millis();
     long timeRemaining = endTime - currentTime;
-    auto& colors = irp->Render(timeRemaining);
+    auto* colors = irp->Render(timeRemaining);
     if (lightsOn)
     {
         for (size_t p = 0; p < ledCount; p++)

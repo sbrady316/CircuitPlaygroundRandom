@@ -43,15 +43,11 @@ namespace MapperTest
 
 			RangedRenderer rr(10 * 1000, color);
 
-			auto& colors = rr.Render(5500);
-			unsigned long c0 = colors[0];
-
-			Assert::AreEqual(c0, color);
-		}
-
-		TEST_METHOD(Method2)
-		{
-			Assert::Fail(L"Flagrant error");
+			auto* colors = rr.Render(10 * 1000);
+			for (auto i = 0; i < 10; i++)
+			{
+				Assert::AreEqual(color, colors[i]);
+			}
 		}
 	};
 }

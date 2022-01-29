@@ -11,7 +11,7 @@
     /// </summary>
     /// <param name="timeMs">The value to render</param>
     /// <returns>Read-only reference to vector</returns>
-const led_array& RangedRenderer::Render(unsigned long timeMs)
+const unsigned long * RangedRenderer::Render(unsigned long timeMs)
 {
     // All "off" for times outside the range
     if (timeMs > this->maxTimeMs)

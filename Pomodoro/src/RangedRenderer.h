@@ -22,11 +22,11 @@ public:
 	/// Renders the value into an array of color values
 	/// </summary>
 	/// <param name="timeMs">The value to render</param>
-	/// <returns>Read-only reference to vector</returns>
-	const virtual led_array& Render(unsigned long timeMs);
+	/// <returns>Read-only pointer to array of values</returns>
+	virtual const unsigned long * Render(unsigned long timeMs);
 
 private:
-	led_array currentView;
+	unsigned long currentView[10];
 	const unsigned long maxTimeMs;
 	const uint32_t color;
 

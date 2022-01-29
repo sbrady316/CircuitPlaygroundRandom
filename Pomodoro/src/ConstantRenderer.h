@@ -25,10 +25,10 @@ public:
 	/// </summary>
 	/// <param name="ignored">Time to render.  Ignored in this implementation.</param>
 	/// <returns>Read-only reference to vector</returns>
-	const virtual led_array & Render(unsigned long ignored);
+	virtual const unsigned long* Render(unsigned long ignored);
 
 private:
-	led_array currentView;
+	unsigned long currentView[10];
 	const long DefaultColor = 0x00FF00;
 };
 
