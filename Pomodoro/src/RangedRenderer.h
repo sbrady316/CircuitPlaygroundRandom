@@ -12,24 +12,30 @@ public:
 	/// <summary>
 	/// Initializes a new instance with the specified max value
 	/// </summary>
-	/// <param name="maxTimeMs">The maximum value to be rendered</param>
-	RangedRenderer(unsigned long maxTimeMs, uint32_t color)
-		: currentView(), maxTimeMs(maxTimeMs), color(color)
+	/// <param name="_maxTimeMs">The maximum value to be rendered</param>
+	RangedRenderer(unsigned long maxTimeMs, uint32_t color, unsigned long * colors, size_t _count)
+		: _maxTimeMs(maxTimeMs), _color(color), _colors(colors), _count(_count)
 	{
 	}
 
 	/// <summary>
-	/// Renders the value into an array of color values
+	/// Renders the value into an array of _color values
 	/// </summary>
-	/// <param name="timeMs">The value to render</param>
+	/// <param name="TimeMs">The value to render</param>
 	/// <returns>Read-only pointer to array of values</returns>
 	virtual const unsigned long * Render(unsigned long timeMs);
 
-private:
-	unsigned long currentView[10];
-	const unsigned long maxTimeMs;
-	const uint32_t color;
+	/// <summary>
+	/// Fades a _color in its component parts by the specified ratio, e.g. 0.5 would reduce intensity by half
+	/// </summary>
+	/// <param name="_color">Color in ARGB format</param>
+	/// <param name="ratio">Ratio by which to reduce intensity</param>
+	/// <returns></returns>
+	unsigned long Fade(unsigned long color, float ratio);
 
-	// Probably need to pass in the number of LEDs in the constructor
-	const uint8_t ledCount = sizeof currentView / sizeof currentView[0];
+private:
+	const unsigned long _maxTimeMs;
+	const uint32_t _color;
+	unsigned long* _colors;
+	const size_t _count;
 };

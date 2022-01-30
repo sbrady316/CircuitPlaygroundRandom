@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdarg.h>
+#include <stdio.h>
 
 // These warnings are for the windows CRT which has functions not available on the arduino
 #define _CRT_SECURE_NO_WARNINGS
@@ -54,7 +55,20 @@ public:
 		logSink.Log(buffer);
 	}
 
-	void LogArray(const char* tag, const long * array, size_t count)
+	void LogArray(uint32_t number, const unsigned long* array, size_t count)
+	{
+		char tag[20];
+		snprintf(tag, sizeof(tag), "%8d", number);
+		LogArray(tag, array, count);
+	}
+
+	/// <summary>
+	/// Writes an array to the log
+	/// </summary>
+	/// <param name="tag">Optional tag about the array</param>
+	/// <param name="array">The array to log</param>
+	/// <param name="count">Number of elements in the array</param>
+	void LogArray(const char* tag, const unsigned long * array, size_t count)
 	{
 		char buffer[BufferSize];
 		size_t pos = 0;
@@ -70,7 +84,7 @@ public:
 
 		// Now add the array members
 		for (size_t i = 0; pos < BufferSize && i < count; i++) {
-			int len = snprintf(buffer + pos, BufferSize - pos, " 0x%08x", array[i]);
+			int len = snprintf(buffer + pos, BufferSize - pos, " 0x%08X", array[i]);
 			pos += len;
 		}
 

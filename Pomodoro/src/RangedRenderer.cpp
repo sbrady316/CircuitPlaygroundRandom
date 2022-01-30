@@ -9,30 +9,51 @@
     /// <summary>
     /// Renders the value into an array of color values
     /// </summary>
-    /// <param name="timeMs">The value to render</param>
+    /// <param name="TimeMs">The value to render</param>
     /// <returns>Read-only reference to vector</returns>
 const unsigned long * RangedRenderer::Render(unsigned long timeMs)
 {
     // All "off" for times outside the range
-    if (timeMs > this->maxTimeMs)
+    if (timeMs > _maxTimeMs)
     {
-        memset(this->currentView, 0, sizeof(this->currentView));
+        memset(_colors, 0, sizeof(_colors[0])*_count);
     }
     else
     {
-        float unitsRemaining = ((float)timeMs / this->maxTimeMs) * this->ledCount;
-        uint8_t wholeUnits = static_cast<uint8_t>(floor(unitsRemaining));
+        float unitsRemaining = ((float)timeMs / _maxTimeMs) * _count;
+        size_t wholeUnits = static_cast<uint8_t>(unitsRemaining);
+        float fractionalUnits = unitsRemaining - wholeUnits;
+
+        // Set whole units to the full color specified by the caller
+        for (auto i = 0; i < wholeUnits; i++)
+        {
+            _colors[i] = _color;
+        }
 
         // Fade the "last" led by reducing its color by the fractional unit remaining
         // This goes before the whole units to cover the case where wholeUnits == unitsRemaining
-        this->currentView[wholeUnits] = static_cast<long>(this->color * (unitsRemaining - wholeUnits));
-
-        // Set whole units to the full color specified by the caller
-        for (uint8_t i = 0; i < wholeUnits; i++)
+        // Need to wrap with the if to handle the case where TimeMs == _maxTimeMs
+        if (wholeUnits < _count)
         {
-            currentView[i] = color;
+            _colors[wholeUnits] = Fade(_color, fractionalUnits);
+        }
+
+        // Set remaining units to off
+        for (auto i = wholeUnits+1; i < _count; i++)
+        {
+            _colors[i] = 0x00000000;
         }
     }
 
-    return this->currentView;
+    return _colors;
+}
+
+unsigned long RangedRenderer::Fade(unsigned long color, float ratio)
+{
+    // Compute 2 bytes at a time, using masking to eliminate bleeding between _colors
+    const uint32_t  a_g = ((uint32_t)((color & 0xFF00FF00) * ratio)) & 0xFF00FF00;
+    const uint32_t  r_b = ((uint32_t)((color & 0x00FF00FF) * ratio)) & 0x00FF00FF;
+    const unsigned long output = a_g | r_b;
+
+    return output;
 }

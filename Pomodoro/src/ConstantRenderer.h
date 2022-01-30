@@ -21,7 +21,7 @@ public:
 	}
 
 	/// <summary>
-	/// Renders the value into an array of color values
+	/// Renders the value into an array of _color values
 	/// </summary>
 	/// <param name="ignored">Time to render.  Ignored in this implementation.</param>
 	/// <returns>Read-only reference to vector</returns>

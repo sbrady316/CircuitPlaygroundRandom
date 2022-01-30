@@ -27,10 +27,17 @@ class SerialLogger : public ILogSink
     }
 };
 
+enum Colors {
+    Red     = 0xFF0000,
+    Green   = 0x00FF00,
+    Blue    = 0x0000FF,
+};
+
 SerialLogger sl;
 PassThroughLogger logger(sl);
 ConstantRenderer* crp = new ConstantRenderer();
-IIntervalRenderer* irp = new RangedRenderer(10 * 1000, 0xFF0000);
+unsigned long colors[ledCount];
+IIntervalRenderer* irp = new RangedRenderer(10 * 1000, Red, colors, ledCount);
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -47,11 +54,10 @@ void setup() {
 
     endTime = millis() + 12 * 1000;
 
-    logger.LogArray("CRP", crp->Render(5000), ledCount);
-    logger.LogArray("0500", irp->Render(500), ledCount);
-    auto* colors = irp->Render(5000);
-    logger.LogArray("5000", colors, ledCount);
-    logger.LogArray("6500", irp->Render(6500), ledCount);
+    //logger.LogArray("CRP ", crp->Render(5000), ledCount);
+    logger.LogArray(0500, irp->Render(500), ledCount);
+    logger.LogArray(1000, irp->Render(1000), ledCount);
+    logger.LogArray(1500, irp->Render(1500), ledCount);
 }
 
 void loop() {
@@ -68,7 +74,14 @@ void loop() {
 
     long currentTime = millis();
     long timeRemaining = endTime - currentTime;
-    auto* colors = irp->Render(timeRemaining);
+    irp->Render(timeRemaining);
+
+    if (currentTime - lastUpdate > 100 && timeRemaining > -1000)
+    {
+        logger.LogArray(timeRemaining, colors, ledCount);
+        lastUpdate = currentTime;
+    }
+
     if (lightsOn)
     {
         for (size_t p = 0; p < ledCount; p++)
@@ -76,6 +89,7 @@ void loop() {
             CircuitPlayground.setPixelColor(p, colors[p]);
         }
     }
+
 }
 
 
