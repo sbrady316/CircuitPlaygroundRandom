@@ -51,9 +51,11 @@ const unsigned long * RangedRenderer::Render(unsigned long timeMs)
 unsigned long RangedRenderer::Fade(unsigned long color, float ratio)
 {
     // Compute 2 bytes at a time, using masking to eliminate bleeding between _colors
-    const uint32_t  a_g = ((uint32_t)((color & 0xFF00FF00) * ratio)) & 0xFF00FF00;
-    const uint32_t  r_b = ((uint32_t)((color & 0x00FF00FF) * ratio)) & 0x00FF00FF;
-    const unsigned long output = a_g | r_b;
+    const uint32_t a = ((uint32_t)((color & 0xFF000000) * ratio)) & 0xFF000000;
+    const uint32_t r = ((uint32_t)((color & 0x00FF0000) * ratio)) & 0x00FF0000;
+    const uint32_t g = ((uint32_t)((color & 0x0000FF00) * ratio)) & 0x0000FF00;
+    const uint32_t b = ((uint32_t)((color & 0x000000FF) * ratio)) & 0x000000FF;
+    const unsigned long output = a | r | g | b;
 
     return output;
 }

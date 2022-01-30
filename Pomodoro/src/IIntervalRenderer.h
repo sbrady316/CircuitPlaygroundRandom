@@ -1,7 +1,5 @@
 #pragma once
 
-typedef uint32_t argb_color_t;
-
 /// <summary>
 /// Interface for rendering an integer value (usually time remaining) into a vector of colors
 /// </summary>

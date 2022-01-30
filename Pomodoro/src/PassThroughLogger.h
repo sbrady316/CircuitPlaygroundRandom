@@ -29,6 +29,29 @@ public:
 
 	}
 
+	const char* Format(char* buffer, const char* format, ...)
+	{
+		// Decorate the format string with logger information
+		va_list argp;
+		va_start(argp, format);
+		auto pos = vsnprintf(buffer, sizeof(buffer), format, argp);
+		va_end(argp);
+
+		// Add a trailing newline and terminator
+		if (pos < 0)
+		{
+			pos = 0;
+		}
+		else if (pos > BufferSize - 1)
+		{
+			pos = BufferSize - 1;
+		}
+
+		buffer[pos++] = '\0';
+
+		return buffer;
+	}
+
 	void Log(const char* format, ...)
 	{
 		char buffer[BufferSize];
@@ -84,7 +107,7 @@ public:
 
 		// Now add the array members
 		for (size_t i = 0; pos < BufferSize && i < count; i++) {
-			int len = snprintf(buffer + pos, BufferSize - pos, " 0x%08X", array[i]);
+			int len = snprintf(buffer + pos, BufferSize - pos, " 0x%08lX", array[i]);
 			pos += len;
 		}
 

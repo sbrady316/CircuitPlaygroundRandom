@@ -109,15 +109,15 @@ namespace MapperTest
 
 		TEST_METHOD(Fade_Test)
 		{
+			char loggingBufer1[128], loggingBufer2[128], loggingBufer3[128], loggingBufer4[128];
 			const size_t count = 10;
 			unsigned long colors[count]{};
 			unsigned long color = 0x00FF00;
 
 			RangedRenderer rr(10 * 1000, color, colors, count);
 
-			auto a = rr.Fade(0xFFFFFF, 0.5);
-
-			Assert::AreEqual((unsigned long)0x7F7F7F, a);
+			Assert::AreEqual(logger.Format(loggingBufer1, "0x%08lX", 0x007F7F7F), logger.Format(loggingBufer2, "0x%08lX", rr.Fade(0x00FFFFFF, 0.5)));
+			Assert::AreEqual(logger.Format(loggingBufer3, "0x%08lX", 0x007F0000), logger.Format(loggingBufer4, "0x%08lX", rr.Fade(0x00FF0000, 0.58)));
 		}
 
 		class RenderAnswer
