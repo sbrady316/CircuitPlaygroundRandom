@@ -107,17 +107,50 @@ namespace MapperTest
 			}
 		}
 
+		TEST_METHOD(Render_60)
+		{
+			wchar_t reason[128];
+
+			const size_t count = 10;
+			unsigned long colors[count]{};
+			unsigned long color = 0xFF0000;
+
+			RangedRenderer rr(60 * 1000, color, colors, count);
+
+			RenderAnswer answers[] = {
+				RenderAnswer(-6000, new unsigned long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }),
+				RenderAnswer(0, new unsigned long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }),
+				RenderAnswer(3000, new unsigned long[] {0x7F0000, 0, 0, 0, 0, 0, 0, 0, 0, 0 }),
+				RenderAnswer(9000, new unsigned long[] {color, 0x7F0000, 0, 0, 0, 0, 0, 0, 0, 0}),
+				RenderAnswer(60 * 1000, new unsigned long[] {color, color, color, color, color, color, color, color, color, color}), // Max value = no fading
+				RenderAnswer(60 * 1000 + 1, new unsigned long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }), // Higher than max value == all off
+			};
+
+			for (auto answer : answers)
+			{
+				rr.Render(answer.TimeMs);
+				logger.LogArray(answer.TimeMs, colors, count);
+				logger.LogArray("Expected", answer.Colors, count);
+				for (auto i = 0; i < count; i++)
+				{
+					swprintf_s(reason, 128, L"TimeMs = %d, i = %d", answer.TimeMs, i);
+					Assert::AreEqual(answer.Colors[i], colors[i], reason);
+				}
+			}
+
+		}
+		
 		TEST_METHOD(Fade_Test)
 		{
-			char loggingBufer1[128], loggingBufer2[128], loggingBufer3[128], loggingBufer4[128];
+			char loggingBuffer1[128], loggingBuffer2[128], loggingBuffer3[128], loggingBuffer4[128];
 			const size_t count = 10;
 			unsigned long colors[count]{};
 			unsigned long color = 0x00FF00;
 
 			RangedRenderer rr(10 * 1000, color, colors, count);
 
-			Assert::AreEqual(logger.Format(loggingBufer1, "0x%08lX", 0x007F7F7F), logger.Format(loggingBufer2, "0x%08lX", rr.Fade(0x00FFFFFF, 0.5)));
-			Assert::AreEqual(logger.Format(loggingBufer3, "0x%08lX", 0x007F0000), logger.Format(loggingBufer4, "0x%08lX", rr.Fade(0x00FF0000, 0.58)));
+			Assert::AreEqual(logger.Format(loggingBuffer1, "0x%08lX", 0x007F7F7F), logger.Format(loggingBuffer2, "0x%08lX", rr.Fade(0x00FFFFFF, 0.5)));
+			Assert::AreEqual(logger.Format(loggingBuffer3, "0x%08lX", 0x007F0000), logger.Format(loggingBuffer4, "0x%08lX", rr.Fade(0x00FF0000, 0.58)));
 		}
 
 		class RenderAnswer

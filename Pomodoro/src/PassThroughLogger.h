@@ -81,7 +81,7 @@ public:
 	void LogArray(uint32_t number, const unsigned long* array, size_t count)
 	{
 		char tag[20];
-		snprintf(tag, sizeof(tag), "%8d", number);
+		snprintf(tag, sizeof(tag), "%8lu", number);
 		LogArray(tag, array, count);
 	}
 
