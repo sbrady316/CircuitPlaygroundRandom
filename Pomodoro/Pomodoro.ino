@@ -9,6 +9,7 @@
 #include <Adafruit_Circuit_Playground.h>
 #include "src\ConstantRenderer.h"
 #include "src\RangedRenderer.h"
+#include "src\CompositeRenderer.h"
 #include "src\PassThroughLogger.h"
 
 unsigned long endTime, lastUpdate = 0;
@@ -35,9 +36,19 @@ enum Colors {
 
 SerialLogger sl;
 PassThroughLogger logger(sl);
-ConstantRenderer* crp = new ConstantRenderer();
 unsigned long colors[ledCount];
-IIntervalRenderer* irp = new RangedRenderer(1000L * 60 * 25, Red, colors, ledCount);
+
+unsigned long rrBuffer1[ledCount];
+unsigned long rrBuffer2[ledCount];
+
+constexpr unsigned long DurationMs = 1000L * 20;
+RangedRenderer rr1(1000L * 10, Red, rrBuffer1, ledCount);
+RangedRenderer rr2(1000L * 20, Blue, rrBuffer2, ledCount);
+IIntervalRenderer* renderers[] = { &rr1, &rr2 };
+
+IIntervalRenderer* irp = new CompositeRenderer(renderers, 2, colors, ledCount);
+
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -52,21 +63,7 @@ void setup() {
     // Geez, that's bright
     CircuitPlayground.setBrightness(10);
 
-    endTime = millis() + 1000L * 60 * 25;
-
-    //logger.LogArray("CRP ", crp->Render(5000), ledCount);
-    logger.LogArray( 983, irp->Render(983), ledCount);
-    logger.LogArray(1000, irp->Render(1000), ledCount);
-    logger.LogArray(1983, irp->Render(1983), ledCount);
-    
-    // Investigate why reds are F'd up on device only
-    //auto rr = new RangedRenderer(10 * 1000, Red, colors, ledCount);
-    //unsigned long sentinel = 0xAA1122BB;
-    //logger.Log("Size Check: (%d) 0x%08lX, %i, %li", sizeof(unsigned long), sentinel, sentinel, sentinel);
-    //logger.Log("0x%04X %04X", (uint16_t)(sentinel >> 16), (uint16_t)(sentinel & 0x0000FFFF));
-    //logger.Log("0.983: 0x%08lX", rr->Fade(Red, 0.983));
-    //logger.Log("0.500: 0x%08lX", rr->Fade(Red, 0.500));
-    //logger.Log("0.283: 0x%08lX", rr->Fade(Red, 0.283));
+    endTime = millis() + DurationMs;
 
     logger.Log("End Setup");
 }
@@ -87,7 +84,7 @@ void loop() {
     long timeRemaining = endTime - currentTime;
     irp->Render(timeRemaining);
 
-    if (currentTime - lastUpdate > 100) // && timeRemaining > -1000)
+    if (currentTime - lastUpdate > 100 && timeRemaining > -1000)
     {
         logger.LogArray(timeRemaining, colors, ledCount);
         lastUpdate = currentTime;

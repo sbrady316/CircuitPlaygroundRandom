@@ -1,23 +1,33 @@
 #pragma once
+#include <stdint.h>
 #include "IIntervalRenderer.h"
 
 class ConstantRenderer :
     public IIntervalRenderer
 {
 public:
-	ConstantRenderer()
-		: currentView()
+	// Not sure why size_t can't be found when compiling for arduino...
+	ConstantRenderer(unsigned long color, unsigned int colorCount)
 	{
-		for (auto i = 0; i < sizeof(currentView); i++)
-		{
-			long color = 0;
-			if (i % 2 == 1)
-			{
-				color = this->DefaultColor;
-			}
+		currentView = new unsigned long[colorCount];
 
-			this->currentView[i] = color;
+		for (auto i = 0; i < colorCount; i++)
+		{
+			//unsigned long defaultColor = 0;
+			//if (i % 2 == 1)
+			//{
+				currentView[i] = color;
+			//}
+			//else
+			//{
+			//	currentView[i] = 0;
+			//}
 		}
+	}
+
+	~ConstantRenderer()
+	{
+		delete[] currentView;
 	}
 
 	/// <summary>
@@ -28,7 +38,6 @@ public:
 	virtual const unsigned long* Render(unsigned long ignored);
 
 private:
-	unsigned long currentView[10];
-	const long DefaultColor = 0x00FF00;
+	unsigned long * currentView;
 };
 

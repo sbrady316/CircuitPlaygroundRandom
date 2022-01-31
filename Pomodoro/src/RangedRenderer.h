@@ -9,12 +9,16 @@ class RangedRenderer :
 	public IIntervalRenderer
 {
 public:
+
 	/// <summary>
 	/// Initializes a new instance with the specified max value
 	/// </summary>
-	/// <param name="_maxTimeMs">The maximum value to be rendered</param>
-	RangedRenderer(unsigned long maxTimeMs, uint32_t color, unsigned long * colors, size_t _count)
-		: _maxTimeMs(maxTimeMs), _color(color), _colors(colors), _count(_count)
+	/// <param name="maxTimeMs">The maximum value to be rendered</param>
+	/// <param name="color">Color used by this renderer</param>
+	/// <param name="colors">Buffer to render into</param>
+	/// <param name="count">Size of buffer</param>
+	RangedRenderer(unsigned long maxTimeMs, uint32_t color, unsigned long * colors, size_t count)
+		: _maxTimeMs(maxTimeMs), _color(color), _colors(colors), _count(count)
 	{
 	}
 

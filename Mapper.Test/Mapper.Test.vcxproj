@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CompositeRenderer.Test.cpp" />
     <ClCompile Include="Logger.Test.cpp" />
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="RangedRenderer.Test.cpp" />
@@ -167,16 +168,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Pomodoro\src\CompositeRenderer.h" />
     <ClInclude Include="..\Pomodoro\src\PassThroughLogger.h" />
     <ClInclude Include="Logging.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <!-- Items to test from other project -->
   <ItemGroup>
-    <ClInclude Include="..\Pomodoro\src\ConstantRenderer.cpp" />
+    <ClInclude Include="..\Pomodoro\src\ConstantRenderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Pomodoro\src\ConstantRenderer.h" />
     <ClInclude Include="..\Pomodoro\src\IIntervalRenderer.h" />
-    <ClInclude Include="..\Pomodoro\src\RangedRenderer.cpp" />
+    <ClInclude Include="..\Pomodoro\src\RangedRenderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Pomodoro\src\RangedRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
