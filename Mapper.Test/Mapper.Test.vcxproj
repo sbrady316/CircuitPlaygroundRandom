@@ -157,7 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CompositeRenderer.Test.cpp" />
-    <ClCompile Include="Logger.Test.cpp" />
+    <ClCompile Include="PassThroughLogger.Test.cpp" />
     <ClCompile Include="Logging.cpp" />
     <ClCompile Include="RangedRenderer.Test.cpp" />
     <ClCompile Include="pch.cpp">
