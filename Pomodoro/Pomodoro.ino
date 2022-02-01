@@ -20,7 +20,7 @@ bool lightsOn = true;
 RenderConfig* currentConfig = NULL;
 RenderConfig** configurations = NULL;
 
-const size_t ledCount = 10;
+uint16_t ledCount;
 
 
 // the setup function runs once when you press reset or power the board
@@ -33,6 +33,7 @@ void setup() {
     CircuitPlayground.speaker.enable(false);
     // Geez, that's bright
     CircuitPlayground.setBrightness(10);
+    ledCount = CircuitPlayground.strip.numPixels();
 
     configurations = new RenderConfig*[2]
     {
@@ -40,8 +41,8 @@ void setup() {
             new CompositeRenderer(
                 new IIntervalRenderer * [3] {
                     new RangedRenderer(1000L * 10, Red, ledCount),
-                    new RangedRenderer(1000L * 60, Green, ledCount),
-                    new RangedRenderer(1000L * 60 * 30, Blue, ledCount),
+                    new RangedRenderer(1000L * 60, 0x007F00, ledCount),
+                    new RangedRenderer(1000L * 60 * 30, 0x004000, ledCount),
                 },
                 3, ledCount
             ),
@@ -52,12 +53,12 @@ void setup() {
             new CompositeRenderer(
                 new IIntervalRenderer * [3] {
                     new RangedRenderer(1000L * 10, Red, ledCount),
-                    new RangedRenderer(1000L * 10, Green, ledCount),
-                    new RangedRenderer(1000L * 20, Blue, ledCount),
+                    new RangedRenderer(1000L * 60, 0x007F00, ledCount),
+                    new RangedRenderer(1000L * 60 * 5, 0x000040, ledCount),
                 },
                 3, ledCount
             ),
-            1000L * 10, // 10 seconds for testing
+            1000L * 60 * 5, // 5 minutes for a break
             millis()
         ),
     };

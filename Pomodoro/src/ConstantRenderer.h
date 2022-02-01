@@ -1,5 +1,5 @@
 #pragma once
-#include <stdint.h>
+#include <stddef.h>
 #include "IIntervalRenderer.h"
 
 class ConstantRenderer :
@@ -7,7 +7,7 @@ class ConstantRenderer :
 {
 public:
 	// Not sure why size_t can't be found when compiling for arduino...
-	ConstantRenderer(unsigned long color, unsigned int colorCount)
+	ConstantRenderer(unsigned long color, size_t colorCount)
 	{
 		currentView = new unsigned long[colorCount];
 
