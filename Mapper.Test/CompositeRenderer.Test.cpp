@@ -31,16 +31,14 @@ namespace MapperTest
 			ConstantRenderer cr1(0x000000FF, ledCount);
 			ConstantRenderer cr2(0x00FF0000, ledCount);
 
-			unsigned long colors[ledCount]{};
 			IIntervalRenderer * childRenderers[] = {&cr1, &cr2};
 
 			CompositeRenderer cr(
 				childRenderers,
 				2,
-				colors,
 				ledCount);
 
-			cr.Render(1000);
+			auto colors = cr.Render(1000);
 
 			logger.LogArray("Composite", colors, ledCount);
 		}

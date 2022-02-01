@@ -9,16 +9,6 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace MapperTest
 {
-	TEST_MODULE_INITIALIZE(ModuleInitialize)
-	{
-		//Logger::WriteMessage("In Module Initialize");
-	}
-
-	TEST_MODULE_CLEANUP(ModuleCleanup)
-	{
-		//Logger::WriteMessage("In Module Cleanup");
-	}
-
 	TEST_CLASS(RangedRendererTest)
 	{
 	private:
@@ -34,24 +24,14 @@ namespace MapperTest
 		{
 		}
 
-		TEST_CLASS_INITIALIZE(ClassInitialize)
-		{
-			//Logger::WriteMessage("In Class Initialize");
-		}
-		TEST_CLASS_CLEANUP(ClassCleanup)
-		{
-			//Logger::WriteMessage("In Class Cleanup");
-		}
-
 		TEST_METHOD(Render_IsExpected)
 		{
 			wchar_t reason[128];
 
 			const size_t count = 10;
-			unsigned long colors[count]{};
 			unsigned long color = 0x00FF00;
 			
-			RangedRenderer rr(10 * 1000, color, colors, count);
+			RangedRenderer rr(10 * 1000, color, count);
 
 			RenderAnswer answers[] = {
 				RenderAnswer(0, new unsigned long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }),
@@ -65,13 +45,13 @@ namespace MapperTest
 			{
 				char tag[20];
 				sprintf_s(tag, sizeof(tag), "%8d", answer.TimeMs);
-				rr.Render(answer.TimeMs);
-				logger.LogArray(tag, colors, count);
+				auto renderBuffer = rr.Render(answer.TimeMs);
+				logger.LogArray(tag, renderBuffer, count);
 				logger.LogArray("Expected", answer.Colors, count);
 				for (auto i = 0; i < count; i++)
 				{
 					swprintf_s(reason, 128, L"TimeMs = %d, i = %d", answer.TimeMs, i);
-					Assert::AreEqual(answer.Colors[i], colors[i], reason);
+					Assert::AreEqual(answer.Colors[i], renderBuffer[i], reason);
 				}
 			}
 		}
@@ -81,10 +61,9 @@ namespace MapperTest
 			wchar_t reason[128];
 
 			const size_t count = 10;
-			unsigned long colors[count]{};
 			unsigned long color = 0xFF0000;
 
-			RangedRenderer rr(10 * 1000, color, colors, count);
+			RangedRenderer rr(10 * 1000, color, count);
 
 			RenderAnswer answers[] = {
 				RenderAnswer(0, new unsigned long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }),
@@ -96,13 +75,13 @@ namespace MapperTest
 
 			for (auto answer : answers)
 			{
-				rr.Render(answer.TimeMs);
-				logger.LogArray(answer.TimeMs, colors, count);
+				auto renderBuffer = rr.Render(answer.TimeMs);
+				logger.LogArray(answer.TimeMs, renderBuffer, count);
 				logger.LogArray("Expected", answer.Colors, count);
 				for (auto i = 0; i < count; i++)
 				{
 					swprintf_s(reason, 128, L"TimeMs = %d, i = %d", answer.TimeMs, i);
-					Assert::AreEqual(answer.Colors[i], colors[i], reason);
+					Assert::AreEqual(answer.Colors[i], renderBuffer[i], reason);
 				}
 			}
 		}
@@ -112,10 +91,9 @@ namespace MapperTest
 			wchar_t reason[128];
 
 			const size_t count = 10;
-			unsigned long colors[count]{};
 			unsigned long color = 0xFF0000;
 
-			RangedRenderer rr(60 * 1000, color, colors, count);
+			RangedRenderer rr(60 * 1000, color, count);
 
 			RenderAnswer answers[] = {
 				RenderAnswer(-6000, new unsigned long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }),
@@ -128,13 +106,13 @@ namespace MapperTest
 
 			for (auto answer : answers)
 			{
-				rr.Render(answer.TimeMs);
-				logger.LogArray(answer.TimeMs, colors, count);
+				auto renderBuffer = rr.Render(answer.TimeMs);
+				logger.LogArray(answer.TimeMs, renderBuffer, count);
 				logger.LogArray("Expected", answer.Colors, count);
 				for (auto i = 0; i < count; i++)
 				{
 					swprintf_s(reason, 128, L"TimeMs = %d, i = %d", answer.TimeMs, i);
-					Assert::AreEqual(answer.Colors[i], colors[i], reason);
+					Assert::AreEqual(answer.Colors[i], renderBuffer[i], reason);
 				}
 			}
 
@@ -144,13 +122,12 @@ namespace MapperTest
 		{
 			char loggingBuffer1[128], loggingBuffer2[128], loggingBuffer3[128], loggingBuffer4[128];
 			const size_t count = 10;
-			unsigned long colors[count]{};
 			unsigned long color = 0x00FF00;
 
-			RangedRenderer rr(10 * 1000, color, colors, count);
+			RangedRenderer rr(10 * 1000, color, count);
 
 			Assert::AreEqual(logger.Format(loggingBuffer1, "0x%08lX", 0x007F7F7F), logger.Format(loggingBuffer2, "0x%08lX", rr.Fade(0x00FFFFFF, 0.5)));
-			Assert::AreEqual(logger.Format(loggingBuffer3, "0x%08lX", 0x007F0000), logger.Format(loggingBuffer4, "0x%08lX", rr.Fade(0x00FF0000, 0.58)));
+			Assert::AreEqual(logger.Format(loggingBuffer3, "0x%08lX", 0x007F0000), logger.Format(loggingBuffer4, "0x%08lX", rr.Fade(0x00FF0000, 0.58f)));
 		}
 
 		class RenderAnswer

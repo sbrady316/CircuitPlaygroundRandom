@@ -15,12 +15,18 @@ public:
 	/// </summary>
 	/// <param name="maxTimeMs">The maximum value to be rendered</param>
 	/// <param name="color">Color used by this renderer</param>
-	/// <param name="colors">Buffer to render into</param>
 	/// <param name="count">Size of buffer</param>
-	RangedRenderer(unsigned long maxTimeMs, uint32_t color, unsigned long * colors, size_t count)
-		: _maxTimeMs(maxTimeMs), _color(color), _colors(colors), _count(count)
+	RangedRenderer(unsigned long maxTimeMs, uint32_t color, size_t count)
+		: _maxTimeMs(maxTimeMs), _color(color), _count(count)
 	{
+		_colors = new unsigned long[count];
 	}
+
+	~RangedRenderer()
+	{
+		delete[] _colors;
+	}
+		
 
 	/// <summary>
 	/// Renders the value into an array of _color values

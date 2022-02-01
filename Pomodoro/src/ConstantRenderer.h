@@ -11,7 +11,7 @@ public:
 	{
 		currentView = new unsigned long[colorCount];
 
-		for (auto i = 0; i < colorCount; i++)
+		for (size_t i = 0; i < colorCount; i++)
 		{
 			//unsigned long defaultColor = 0;
 			//if (i % 2 == 1)

@@ -25,7 +25,7 @@ const unsigned long * RangedRenderer::Render(unsigned long timeMs)
         float fractionalUnits = unitsRemaining - wholeUnits;
 
         // Set whole units to the full color specified by the caller
-        for (auto i = 0; i < wholeUnits; i++)
+        for (size_t i = 0; i < wholeUnits; i++)
         {
             _colors[i] = _color;
         }
