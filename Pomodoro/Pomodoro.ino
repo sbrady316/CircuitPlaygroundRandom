@@ -40,8 +40,8 @@ void setup() {
         new RenderConfig(
             new CompositeRenderer(
                 new IIntervalRenderer * [3] {
-                    new RangedRenderer(1000L * 10, Red, ledCount),
-                    new RangedRenderer(1000L * 60, 0x007F00, ledCount),
+                    new RangedRenderer(1000L * 60, Red, ledCount),
+                    new RangedRenderer(1000L * 60 * 5, 0x00007F, ledCount),
                     new RangedRenderer(1000L * 60 * 30, 0x004000, ledCount),
                 },
                 3, ledCount
@@ -53,8 +53,8 @@ void setup() {
             new CompositeRenderer(
                 new IIntervalRenderer * [3] {
                     new RangedRenderer(1000L * 10, Red, ledCount),
-                    new RangedRenderer(1000L * 60, 0x007F00, ledCount),
-                    new RangedRenderer(1000L * 60 * 5, 0x000040, ledCount),
+                    new RangedRenderer(1000L * 60, 0x00007F, ledCount),
+                    new RangedRenderer(1000L * 60 * 5, 0x004000, ledCount),
                 },
                 3, ledCount
             ),
