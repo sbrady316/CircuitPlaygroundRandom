@@ -43,7 +43,34 @@ public:
 	/// <returns>Color for the specified position and time</returns>
 	virtual const argb_t GetValue(size_t index, unsigned long timeMs)
 	{
-		return 0;
+		argb_t value = 0;
+
+		// All "off" for times outside the range
+		if (timeMs > _maxTimeMs)
+		{
+			value = 0;
+		}
+		else
+		{
+			float unitsRemaining = ((float)timeMs / _maxTimeMs) * _count;
+			size_t wholeUnits = static_cast<uint8_t>(unitsRemaining);
+			float fractionalUnits = unitsRemaining - wholeUnits;
+
+			if (index < wholeUnits)
+			{
+				value = _color;
+			}
+			else if (index == wholeUnits)
+			{
+				value = Fade(_color, fractionalUnits);
+			}
+			else
+			{
+				value = 0x00000000;
+			}
+		}
+
+		return value;
 	}
 
 	/// <summary>

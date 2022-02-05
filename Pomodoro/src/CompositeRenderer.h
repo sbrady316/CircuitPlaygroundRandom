@@ -40,7 +40,14 @@ public:
     /// <returns>Color for the specified position and time</returns>
     virtual const argb_t GetValue(size_t index, unsigned long timeMs)
     {
-        return 0;
+        argb_t returnValue = 0;
+
+        for (auto i = 0; i < _rendererCount; i++)
+        {
+            auto r = _renderers[i];
+            returnValue |= r->GetValue(index, timeMs);
+        }
+        return returnValue;
     }
 
 private:

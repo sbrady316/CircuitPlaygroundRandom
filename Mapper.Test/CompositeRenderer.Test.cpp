@@ -42,5 +42,22 @@ namespace MapperTest
 
 			logger.LogArray("Composite", colors, ledCount);
 		}
+
+		TEST_METHOD(GetValue_HappyPath)
+		{
+			const size_t ledCount = 3;
+
+			ConstantRenderer cr1(0x000000FF, ledCount);
+			ConstantRenderer cr2(0x00FF0000, ledCount);
+
+			IIntervalRenderer* childRenderers[] = { &cr1, &cr2 };
+
+			CompositeRenderer cr(
+				childRenderers,
+				2,
+				ledCount);
+
+			Assert::AreEqual((argb_t)0x00FF00FF, cr.GetValue(0, 1));
+		}
 	};
 }

@@ -115,9 +115,36 @@ namespace MapperTest
 					Assert::AreEqual(answer.Colors[i], renderBuffer[i], reason);
 				}
 			}
-
 		}
-		
+
+		TEST_METHOD(GetValue_HappyPath)
+		{
+			wchar_t reason[128];
+			const size_t count = 10;
+			unsigned long color = 0xFF0000;
+
+			RangedRenderer rr(60 * 1000, color, count);
+
+			GetValueAnswer answers[] = {
+				GetValueAnswer(0, -6000, 0),
+				GetValueAnswer(0, 0, 0),
+				GetValueAnswer(0, 3000, 0x7F0000),
+				GetValueAnswer(1, 3000, 0),
+				GetValueAnswer(0, 9000, color),
+				GetValueAnswer(1, 9000, 0x7F0000),
+				GetValueAnswer(2, 9000, 0),
+				GetValueAnswer(count-1, 60 * 1000, color), // Max value = no fading
+				GetValueAnswer(0, 60 * 1000 + 1, 0), // Higher than max value == all off
+			};
+
+			for (const GetValueAnswer& answer : answers)
+			{
+				auto actual = rr.GetValue(answer.Position, answer.TimeMs);
+				swprintf_s(reason, 128, L"Position = %d, TimeMs = %d", answer.Position, answer.TimeMs);
+				Assert::AreEqual(answer.Expected, actual, reason);
+			}
+		}
+
 		TEST_METHOD(Fade_Test)
 		{
 			char loggingBuffer1[128], loggingBuffer2[128], loggingBuffer3[128], loggingBuffer4[128];
@@ -139,6 +166,20 @@ namespace MapperTest
 
 			unsigned long TimeMs;
 			unsigned long * Colors;
+		};
+
+		class GetValueAnswer
+		{
+		public:
+			GetValueAnswer(size_t position, unsigned long timeMs, argb_t expected)
+				: Position(position), TimeMs(timeMs), Expected(expected)
+			{
+
+			}
+
+			unsigned long TimeMs;
+			size_t Position;
+			argb_t Expected;
 		};
 	};
 }
