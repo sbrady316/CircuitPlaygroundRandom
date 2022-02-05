@@ -174,7 +174,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <!-- Items to test from other project -->
-  <ItemGroup>
+  <ItemGroup Label="Imports">
     <ClInclude Include="..\Pomodoro\src\ConstantRenderer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>

@@ -32,6 +32,17 @@ public:
         return _renderBuffer;
     }
 
+    /// <summary>
+    /// Computes the value for the specified position
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="timeMs"></param>
+    /// <returns>Color for the specified position and time</returns>
+    virtual const argb_t GetValue(size_t index, unsigned long timeMs)
+    {
+        return 0;
+    }
+
 private:
     IIntervalRenderer** _renderers;
     const size_t _rendererCount;

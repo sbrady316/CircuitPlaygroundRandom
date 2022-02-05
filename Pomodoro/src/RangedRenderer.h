@@ -36,6 +36,17 @@ public:
 	virtual const unsigned long * Render(unsigned long timeMs);
 
 	/// <summary>
+	/// Computes the value for the specified position
+	/// </summary>
+	/// <param name="index"></param>
+	/// <param name="timeMs"></param>
+	/// <returns>Color for the specified position and time</returns>
+	virtual const argb_t GetValue(size_t index, unsigned long timeMs)
+	{
+		return 0;
+	}
+
+	/// <summary>
 	/// Fades a _color in its component parts by the specified ratio, e.g. 0.5 would reduce intensity by half
 	/// </summary>
 	/// <param name="_color">Color in ARGB format</param>
