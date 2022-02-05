@@ -17,7 +17,7 @@ public:
 	/// </summary>
 	/// <param name="TimeMs">The value to render</param>
 	/// <returns>Read-only reference to vector</returns>
-	virtual const unsigned long * Render(unsigned long timeMs) = 0;
+	//virtual const unsigned long * Render(unsigned long timeMs) = 0;
 
 	/// <summary>
 	/// Computes the value for the specified position

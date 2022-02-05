@@ -99,11 +99,12 @@ void loop() {
     long timeRemaining = currentConfig->GetEndTime() - currentTime;
     //auto colors = currentConfig->GetRenderer()->Render(timeRemaining);
 
-    //if (currentTime - lastUpdate > 100 && timeRemaining > -1000)
-    //{
-    //    logger.LogArray(timeRemaining, colors, ledCount);
-    //    lastUpdate = currentTime; 
-    //}
+    if (currentTime - lastUpdate > 100 && timeRemaining > -1000)
+    {
+        //logger.LogArray(timeRemaining, colors, ledCount);
+        logger.Log("%8lu: 0x%08lX", timeRemaining, currentConfig->GetRenderer()->GetValue(0, timeRemaining));
+        lastUpdate = currentTime; 
+    }
 
     if (lightsOn)
     {

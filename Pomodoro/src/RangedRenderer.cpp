@@ -11,42 +11,42 @@
     /// </summary>
     /// <param name="TimeMs">The value to render</param>
     /// <returns>Read-only reference to vector</returns>
-const unsigned long * RangedRenderer::Render(unsigned long timeMs)
-{
-    // All "off" for times outside the range
-    if (timeMs > _maxTimeMs)
-    {
-        memset(_colors, 0, sizeof(_colors[0])*_count);
-    }
-    else
-    {
-        float unitsRemaining = ((float)timeMs / _maxTimeMs) * _count;
-        size_t wholeUnits = static_cast<uint8_t>(unitsRemaining);
-        float fractionalUnits = unitsRemaining - wholeUnits;
-
-        // Set whole units to the full color specified by the caller
-        for (size_t i = 0; i < wholeUnits; i++)
-        {
-            _colors[i] = _color;
-        }
-
-        // Fade the "last" led by reducing its color by the fractional unit remaining
-        // This goes before the whole units to cover the case where wholeUnits == unitsRemaining
-        // Need to wrap with the if to handle the case where TimeMs == _maxTimeMs
-        if (wholeUnits < _count)
-        {
-            _colors[wholeUnits] = Fade(_color, fractionalUnits);
-        }
-
-        // Set remaining units to off
-        for (auto i = wholeUnits+1; i < _count; i++)
-        {
-            _colors[i] = 0x00000000;
-        }
-    }
-
-    return _colors;
-}
+//const unsigned long * RangedRenderer::Render(unsigned long timeMs)
+//{
+//    // All "off" for times outside the range
+//    if (timeMs > _maxTimeMs)
+//    {
+//        memset(_colors, 0, sizeof(_colors[0])*_count);
+//    }
+//    else
+//    {
+//        float unitsRemaining = ((float)timeMs / _maxTimeMs) * _count;
+//        size_t wholeUnits = static_cast<uint8_t>(unitsRemaining);
+//        float fractionalUnits = unitsRemaining - wholeUnits;
+//
+//        // Set whole units to the full color specified by the caller
+//        for (size_t i = 0; i < wholeUnits; i++)
+//        {
+//            _colors[i] = _color;
+//        }
+//
+//        // Fade the "last" led by reducing its color by the fractional unit remaining
+//        // This goes before the whole units to cover the case where wholeUnits == unitsRemaining
+//        // Need to wrap with the if to handle the case where TimeMs == _maxTimeMs
+//        if (wholeUnits < _count)
+//        {
+//            _colors[wholeUnits] = Fade(_color, fractionalUnits);
+//        }
+//
+//        // Set remaining units to off
+//        for (auto i = wholeUnits+1; i < _count; i++)
+//        {
+//            _colors[i] = 0x00000000;
+//        }
+//    }
+//
+//    return _colors;
+//}
 
 unsigned long RangedRenderer::Fade(unsigned long color, float ratio)
 {

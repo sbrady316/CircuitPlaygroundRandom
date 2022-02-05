@@ -28,7 +28,7 @@ public:
 	/// </summary>
 	/// <param name="ignored">Time to render.  Ignored in this implementation.</param>
 	/// <returns>Read-only reference to vector</returns>
-	virtual const unsigned long* Render(unsigned long ignored);
+	//virtual const unsigned long* Render(unsigned long ignored);
 
 	/// <summary>
 	/// Computes the value for the specified position

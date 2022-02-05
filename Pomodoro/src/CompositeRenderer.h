@@ -16,21 +16,21 @@ public:
         delete[] _renderBuffer;
     }
 
-    virtual const unsigned long* Render(unsigned long timeMs)
-    {
-        memset(_renderBuffer, 0, sizeof(_renderBuffer[0]) * _colorsCount);
+    //virtual const unsigned long* Render(unsigned long timeMs)
+    //{
+    //    memset(_renderBuffer, 0, sizeof(_renderBuffer[0]) * _colorsCount);
 
-        for (size_t i = 0; i < _rendererCount; i++)
-        {
-            auto* newBuffer = _renderers[i]->Render(timeMs);
-            for (size_t j = 0; j < _colorsCount; j++)
-            {
-                _renderBuffer[j] |= newBuffer[j];
-            }
-        }
+    //    for (size_t i = 0; i < _rendererCount; i++)
+    //    {
+    //        auto* newBuffer = _renderers[i]->Render(timeMs);
+    //        for (size_t j = 0; j < _colorsCount; j++)
+    //        {
+    //            _renderBuffer[j] |= newBuffer[j];
+    //        }
+    //    }
 
-        return _renderBuffer;
-    }
+    //    return _renderBuffer;
+    //}
 
     /// <summary>
     /// Computes the value for the specified position
@@ -42,7 +42,7 @@ public:
     {
         argb_t returnValue = 0;
 
-        for (auto i = 0; i < _rendererCount; i++)
+        for (size_t i = 0; i < _rendererCount; i++)
         {
             auto r = _renderers[i];
             returnValue |= r->GetValue(index, timeMs);

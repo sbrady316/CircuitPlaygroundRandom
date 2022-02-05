@@ -33,7 +33,7 @@ public:
 	/// </summary>
 	/// <param name="TimeMs">The value to render</param>
 	/// <returns>Read-only pointer to array of values</returns>
-	virtual const unsigned long * Render(unsigned long timeMs);
+	//virtual const unsigned long * Render(unsigned long timeMs);
 
 	/// <summary>
 	/// Computes the value for the specified position
