@@ -50,6 +50,19 @@ void setup() {
             millis()
         ),
 
+        new RenderConfig(
+            new CompositeRenderer(
+                new IIntervalRenderer * [3] {
+                    new RangedRenderer(1000L * 10, Red, ledCount),
+                    new RangedRenderer(1000L * 60, 0x00007F, ledCount),
+                    new RangedRenderer(1000L * 60 * 5, 0x004000, ledCount),
+                },
+                3, ledCount
+            ),
+            1000L * 60 * 5, // 5 minutes for a break
+            millis()
+        ),
+
         // Test config
         new RenderConfig(
             new CompositeRenderer(
@@ -61,19 +74,6 @@ void setup() {
                 3, ledCount
             ),
             1000L * 10, // 10 seconds
-            millis()
-        ),
-
-        new RenderConfig(
-            new CompositeRenderer(
-                new IIntervalRenderer * [3] {
-                    new RangedRenderer(1000L * 10, Red, ledCount),
-                    new RangedRenderer(1000L * 60, 0x00007F, ledCount),
-                    new RangedRenderer(1000L * 60 * 5, 0x004000, ledCount),
-                },
-                3, ledCount
-            ),
-            1000L * 60 * 5, // 5 minutes for a break
             millis()
         ),
     };
