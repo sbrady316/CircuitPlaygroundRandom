@@ -24,23 +24,40 @@ namespace MapperTest
 		{
 		}
 
-		TEST_METHOD(Render_HappyPath)
+		//TEST_METHOD(Render_HappyPath)
+		//{
+		//	const size_t ledCount = 3;
+
+		//	ConstantRenderer cr1(0x000000FF, ledCount);
+		//	ConstantRenderer cr2(0x00FF0000, ledCount);
+
+		//	IIntervalRenderer * childRenderers[] = {&cr1, &cr2};
+
+		//	CompositeRenderer cr(
+		//		childRenderers,
+		//		2,
+		//		ledCount);
+
+		//	auto colors = cr.Render(1000);
+
+		//	logger.LogArray("Composite", colors, ledCount);
+		//}
+
+		TEST_METHOD(GetValue_HappyPath)
 		{
 			const size_t ledCount = 3;
 
 			ConstantRenderer cr1(0x000000FF, ledCount);
 			ConstantRenderer cr2(0x00FF0000, ledCount);
 
-			IIntervalRenderer * childRenderers[] = {&cr1, &cr2};
+			IIntervalRenderer* childRenderers[] = { &cr1, &cr2 };
 
 			CompositeRenderer cr(
 				childRenderers,
 				2,
 				ledCount);
 
-			auto colors = cr.Render(1000);
-
-			logger.LogArray("Composite", colors, ledCount);
+			Assert::AreEqual((argb_t)0x00FF00FF, cr.GetValue(0, 1));
 		}
 	};
 }

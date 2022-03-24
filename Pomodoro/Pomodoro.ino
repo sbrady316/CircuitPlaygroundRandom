@@ -35,7 +35,7 @@ void setup() {
     CircuitPlayground.setBrightness(10);
     ledCount = CircuitPlayground.strip.numPixels();
 
-    configurations = new RenderConfig*[2]
+    configurations = new RenderConfig*[3]
     {
         new RenderConfig(
             new CompositeRenderer(
@@ -49,6 +49,7 @@ void setup() {
             1000L * 60 * 25, // 25 minutes for real pomodoro
             millis()
         ),
+
         new RenderConfig(
             new CompositeRenderer(
                 new IIntervalRenderer * [3] {
@@ -59,6 +60,20 @@ void setup() {
                 3, ledCount
             ),
             1000L * 60 * 5, // 5 minutes for a break
+            millis()
+        ),
+
+        // Test config
+        new RenderConfig(
+            new CompositeRenderer(
+                new IIntervalRenderer * [3] {
+                    new RangedRenderer(1000L * 2, Red, ledCount),
+                    new RangedRenderer(1000L * 5, 0x00007F, ledCount),
+                    new RangedRenderer(1000L * 10, 0x004000, ledCount),
+                },
+                3, ledCount
+            ),
+            1000L * 10, // 10 seconds
             millis()
         ),
     };
@@ -82,19 +97,21 @@ void loop() {
 
     long currentTime = millis();
     long timeRemaining = currentConfig->GetEndTime() - currentTime;
-    auto colors = currentConfig->GetRenderer()->Render(timeRemaining);
+    //auto colors = currentConfig->GetRenderer()->Render(timeRemaining);
 
     if (currentTime - lastUpdate > 100 && timeRemaining > -1000)
     {
-        logger.LogArray(timeRemaining, colors, ledCount);
-        lastUpdate = currentTime;
+        //logger.LogArray(timeRemaining, colors, ledCount);
+        logger.Log("%8lu: 0x%08lX", timeRemaining, currentConfig->GetRenderer()->GetValue(0, timeRemaining));
+        lastUpdate = currentTime; 
     }
 
     if (lightsOn)
     {
         for (size_t p = 0; p < ledCount; p++)
         {
-            CircuitPlayground.setPixelColor(p, colors[p]);
+            //CircuitPlayground.setPixelColor(p, colors[p]);
+            CircuitPlayground.setPixelColor(p, currentConfig->GetRenderer()->GetValue(p, timeRemaining));
         }
     }
 
